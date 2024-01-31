@@ -1,23 +1,23 @@
-import logo from './logo.svg';
+import React, {useState} from "react";
+import { MapContainer, TileLayer, useMap, Popup,Marker } from 'react-leaflet'
 import './App.css';
+import 'leaflet/dist/leaflet.css';
+import { Icon } from "leaflet";
+// import * as parkData from "./data/skateboard-parks.json";
+// import Dashboard from "./components/DashboardMasonry";
+import Dashboard from "./components/Dashboard";
+import DataProvider from './providers/DataProvider'
 
 function App() {
+  const position = [42.123, -112.23]; // [latitude, longitude]
+  const zoomLevel = 13;
+ 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className = "App">
+      <DataProvider>
+      {/* hi */}
+        <Dashboard />
+      </DataProvider>
     </div>
   );
 }

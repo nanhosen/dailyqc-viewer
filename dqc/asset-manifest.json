@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/dbdata/station/info/dqc/static/css/main.81b74c8f.css",
+    "main.js": "/dbdata/station/info/dqc/static/js/main.436aea12.js",
+    "static/js/787.2473c7e1.chunk.js": "/dbdata/station/info/dqc/static/js/787.2473c7e1.chunk.js",
+    "index.html": "/dbdata/station/info/dqc/index.html",
+    "main.81b74c8f.css.map": "/dbdata/station/info/dqc/static/css/main.81b74c8f.css.map",
+    "main.436aea12.js.map": "/dbdata/station/info/dqc/static/js/main.436aea12.js.map",
+    "787.2473c7e1.chunk.js.map": "/dbdata/station/info/dqc/static/js/787.2473c7e1.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.81b74c8f.css",
+    "static/js/main.436aea12.js"
+  ]
+}
