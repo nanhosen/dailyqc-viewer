@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
+import Stack from '@mui/material/Stack';
 
 import AppContext from '../contexts/AppContext'
 import { MapContainer, TileLayer } from "react-leaflet";
@@ -84,12 +85,12 @@ const cloudObj = {
 const getIcon = (type) =>{
   const iconObj = {
     "SKC": {path:'https://www.cbrfc.noaa.gov/dbdata/station/info/dqc/sunny.png', size:[32,32]},
-    "CLR": {path:'/dbdata/station/info/dqc/sunny.png', size:[32,32]},
-    // "CLR": {path:'https://www.cbrfc.noaa.gov/dbdata/station/info/dqc/sunny.png', size:[32,32]},
+    // "CLR": {path:'/dbdata/station/info/dqc/sunny.png', size:[32,32]},
+    "CLR": {path:'https://www.cbrfc.noaa.gov/dbdata/station/info/dqc/sunny.png', size:[32,32]},
     "FEW": {path:'https://www.cbrfc.noaa.gov/dbdata/station/info/dqc/sunny.png', size:[32,32]},
     "SCT": {path:'https://www.cbrfc.noaa.gov/dbdata/station/info/dqc/sunny.png', size:[32,32]},
     "BKN": {path:'https://www.cbrfc.noaa.gov/dbdata/station/info/dqc/cloud1.png', size:[32,32]},
-    "VV": {path:'/dbdata/station/info/dqc/fogicon.png', size:[20,20]},
+    "VV": {path:'https://www.cbrfc.noaa.gov/dbdata/station/info/dqc/fogicon.png', size:[20,20]},
     "OVC": {path:'https://www.cbrfc.noaa.gov/dbdata/station/info/dqc/cloud1.png', size:[32,32]},
     "liquid": {path:'https://www.cbrfc.noaa.gov/dbdata/station/info/dqc/rain.png', size:[20,20]},
     "frozen": {path:'https://www.cbrfc.noaa.gov/dbdata/station/info/dqc/snow.png', size:[20,20]},
@@ -235,7 +236,7 @@ function MapLayers(props){
     //   </Grid>
     //   <Grid item xs={3} sm={3} md={6}  lg={9}>
     //   <Button variant="outlined" size="small" className="align-left">
-    //     {formatDateReadable(context.requestBeginHour)} - {formatDateReadable(context.requestEndHour)}
+    //     {formatDateReadable(context.requestBeginHour)} - {formatDateReadable(context.testDateState.requestEndHour)}
     //   </Button>
     //   </>
     // )
@@ -270,27 +271,30 @@ export default function MetarMapState () {
   const zoomLevel = 6
 
   useEffect(()=>{
-    // console.log('map for data should be cahnging')
-    if(context.dataforApp && context.requestEndHour &&context.timeDelta){
-      const deltaKey = `d${context.timeDelta}`
+    console.log('map for data should be cahnging',context.dataforApp , context.testDateState.requestEndHour ,context.testDateState.timeDelta)
+    if(context.dataforApp && context.testDateState.requestEndHour &&context.testDateState.timeDelta){
+      const deltaKey = `d${context.testDateState.timeDelta}`
       if(deltaKey in context.dataforApp){
-        if(context.requestEndHour in context.dataforApp[deltaKey]){
-          const obsDatContext = context['dataforApp'][deltaKey][context.requestEndHour]
+        if(context.testDateState.requestEndHour in context.dataforApp[deltaKey]){
+          const obsDatContext = context['dataforApp'][deltaKey][context.testDateState.requestEndHour]
           setObsDat(obsDatContext)
           // console.log(obsDatContext,'pleeeease')
         }
       }
 
       
-      // console.log('fuuu', context.dataforApp, context.requestEndHour,context.timeDelta)
+      // console.log('fuuu', context.dataforApp, context.testDateState.requestEndHour,context.timeDelta)
       // 
       
     }
-  },[context.dataforApp, context.requestEndHour,context.timeDelta])
-
+  },[context.dataforApp,context.testDateState])
+  
   useEffect(()=>{
     console.log('context changed',context)
   },[context])
+  useEffect(()=>{
+    console.log('testDateState changed',context.testDateState)
+  },[context.testDateState])
   // const handleChange = (in)=>{
   //   console.log('in', in)
   // }
@@ -301,13 +305,15 @@ export default function MetarMapState () {
     let nextIndex
     if(event == 'forward'){
       nextIndex = hourIndex + 1
-      console.log('clicked foraward delta', context.timeDelta)
-      context.setRequestEndHourDispatch({type: 'forward', payload: {appData: context.dataforApp, timeDelta: context.timeDelta}})
+      // console.log('clicked foraward delta', context.timeDelta)
+      // context.setRequestEndHourDispatch({type: 'forward', payload: {appData: context.dataforApp, timeDelta: context.timeDelta}})
+      context.dispatchTestDateState({type: 'forward', payload: {}})
       setHourIndex()
     }
     else if(event == 'backward'){
       nextIndex = hourIndex>0 ? hourIndex - 1 : hourIndex
-      context.setRequestEndHourDispatch({type: 'back', payload:{appData: context.dataforApp, timeDelta: context.timeDelta}})
+      // context.setRequestEndHourDispatch({type: 'back', payload:{appData: context.dataforApp, timeDelta: context.timeDelta}})
+      context.dispatchTestDateState({type: 'backward', payload: {}})
     }
     else{
       console.log('this is weird i am not a recovnized event', event)
@@ -355,25 +361,29 @@ export default function MetarMapState () {
       />
     </MapContainer>
     <Box>
-    <Grid container spacing={1} sx={{mt:1}} alignItems="flex-start" justifyContent="center" >
+    <Grid container spacing={1} sx={{mt:1}} alignItems="flex-center" justifyContent="center" >
       <Grid item xs={"auto"} sm={"auto"} md={"auto"}  lg={"auto"}>
       {/* <Button variant="outlined" size="small" className="align-left"> */}
-        {/* {formatDateReadable(context.requestBeginHour)} - {formatDateReadable(context.requestEndHour)} */}
+        {/* {formatDateReadable(context.requestBeginHour)} - {formatDateReadable(context.testDateState.requestEndHour)} */}
       {/* </Button> */}
+      <Stack spacing={1} sx={{pr:7}}>
 
-        <Typography variant="h6"  align = 'left'>
-        {/* {context.requestBeginHour} to {context.requestEndHour} */}
-        Map Time: {formatMapDate(context.requestBeginHour, context.requestEndHour)}
+        <Typography variant="subtitle1"  align = 'center'>
+        {/* {context.requestBeginHour} to {context.testDateState.requestEndHour} */}
+        Map Time: {formatMapDate(context.testDateState.requestBeginHour, context.testDateState.requestEndHour)}
         </Typography>
+        {< HourButtonGroup loading ={context.loading} handleChange = {handleChange} timeDelta = {context.testDateState.timeDelta} />}
+      </Stack>
+
       </Grid>
-      <Grid item xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"}>
-        {< HourButtonGroup loading ={context.loading} handleChange = {handleChange} timeDelta = {context.timeDelta} />}
+      {/* <Grid item xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"}> */}
+        {/* {< HourButtonGroup loading ={context.loading} handleChange = {handleChange} timeDelta = {context.testDateState.timeDelta} />} */}
 
         {/* <ButtonGroup disableElevation={true} size="small"  fullWidth = {false} variant="contained"  aria-label="outlined primary button group">
           <LoadingButton loading onClick = {()=>handleChange('backward')} value='one' > <ChevronLeftIcon />- {context.timeDelta} hrs</LoadingButton>
           <Button onClick = {()=>handleChange('forward')} value='one' >+ {context.timeDelta} hrs  <ChevronRightIcon /></Button>
         </ButtonGroup> */}
-      </Grid>
+      {/* </Grid> */}
       <Grid item xs={"auto"} sm={"auto"} md={"auto"} lg={"auto"}>
         <ControlledRadioButtonsGroup />
       </Grid>
@@ -393,8 +403,9 @@ function ControlledRadioButtonsGroup() {
   // const [value, setValue] = React.useState(context.timeDelta);
 
   const handleChange = (event) => {
-    console.log('clicked',event.target.value)
-    context.setTimeDelta(event.target.value);
+    // console.log('delta clicked',event.target.value, 'value type', typeof event.target.value)
+    // context.setTimeDelta(event.target.value);
+    context.dispatchTestDateState({type: 'deltaChange', payload: {newDelta:event.target.value}})
   };
 
   return (
@@ -404,7 +415,7 @@ function ControlledRadioButtonsGroup() {
         row
         aria-labelledby="demo-controlled-radio-buttons-group"
         name="controlled-radio-buttons-group"
-        value={context.timeDelta}
+        value={context.testDateState.timeDelta}
         onChange={handleChange}
         
       >

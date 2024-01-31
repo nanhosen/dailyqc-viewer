@@ -52,15 +52,15 @@ function formatMapDate(beginDateIn, endDateIn){
 
 function roundToPreviousZHour(currentTimeIn, timeDelta) {
   const currentTime = new Date(currentTimeIn)
-  console.log('currentTime, timeDelta', currentTime, 'current time type', typeof currentTime,  timeDelta)
+  // console.log('currentTime, timeDelta', currentTime, 'current time type', typeof currentTime,  timeDelta)
   // Get the current hour in Z format
   const roundHrObj = {
     1: [1,2,3,4,5,6,7,8,9,0,11,12,13,14,15,16,17,18,19,20,21,22,23],
     6:[0, 6, 12, 18],
-    12:[0,12,24],
-    24:[0]
+    12:[0,12],
+    24:[0,12]
   }
-  // console.log('here28',roundHrObj, timeDelta, typeof timeDelta)
+  console.log('here63', 'timeDelta',timeDelta,'timedetlatype', typeof timeDelta)
   const currentHour = currentTime.getUTCHours();
   const currDay = currentTime.getUTCDate()
   const currMonth = currentTime.getUTCMonth() 
@@ -68,15 +68,15 @@ function roundToPreviousZHour(currentTimeIn, timeDelta) {
   console.log('currrrrrr',currMonth,currDay,currYear)
   let roundedDay
   const zHrAr = roundHrObj[timeDelta]
-  console.log(zHrAr, 'currentHour',currentHour)
+  console.log('zHrAr', zHrAr,'currentHour',currentHour)
   const highestLowerNumber =zHrAr.includes(currentHour) ? currentHour : zHrAr.filter(number => number < currentHour).pop();
   console.log('highestLowerNumber',highestLowerNumber)
   if(highestLowerNumber ===0){
-      console.log('have to go back because in zero')
+      // console.log('have to go back because in zero')
       const previousDay = new Date(currentTime);
        previousDay.setDate(currDay - 1);
        const previousDate = currDay
-       console.log('previousDay',previousDay, 'previousDate',previousDate)
+      //  console.log('previousDay',previousDay, 'previousDate',previousDate)
        roundedDay = previousDate
   }
   else{
@@ -150,14 +150,14 @@ function getUTCThings(date){
   return {day, month, year}
 }
 function checkDates(newDate, timeDelta){
-  console.log('in checkDates', newDate, timeDelta)
+  // console.log('in checkDates', newDate, timeDelta)
   // console.log(newDate,'asdfasdf')
-  console.log('calling roundToPreviousZHour from checkDates')
+  // console.log('calling roundToPreviousZHour from checkDates')
   const newDateRounded = roundToPreviousZHour(new Date(newDate),timeDelta)
-  console.log('new date rounded', newDateRounded)
+  // console.log('new date rounded', newDateRounded)
   const {day: newDay, month: newMonth, year: newYear} = getUTCThings(newDateRounded)
   const newDateDate = new Date(newDate)
-  console.log('rounding again from line 123 calling roundTo')
+  // console.log('rounding again from line 123 calling roundTo')
   const currDate = roundToPreviousZHour(new Date(),timeDelta)
   const {day: currDay, month: currMonth, year: currYear} = getUTCThings(currDate)
 
@@ -168,7 +168,7 @@ function checkDates(newDate, timeDelta){
   const currDateUnix = new Date(currDate).getTime()
   // console.log('check time',newDateUnix - currDateUnix)
   const timeCheck = newDateUnix - currDateUnix
-  console.log('time check', timeCheck)
+  // console.log('time check', timeCheck)
   return  timeCheck >0 ? 'invalid' : 'valid'
 
 }

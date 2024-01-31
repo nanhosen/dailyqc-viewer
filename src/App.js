@@ -2,12 +2,15 @@ import React, {useState} from "react";
 import { MapContainer, TileLayer, useMap, Popup,Marker } from 'react-leaflet'
 import './App.css';
 import 'leaflet/dist/leaflet.css';
+import {enableMapSet} from "immer"
+
 import { Icon } from "leaflet";
 // import * as parkData from "./data/skateboard-parks.json";
 // import Dashboard from "./components/DashboardMasonry";
 import Dashboard from "./components/Dashboard";
 import DataProvider from './providers/DataProvider'
 
+enableMapSet()
 function App() {
   const position = [42.123, -112.23]; // [latitude, longitude]
   const zoomLevel = 13;
